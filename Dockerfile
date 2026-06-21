@@ -1,17 +1,18 @@
 FROM php:8.4-cli
 
-RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    libsqlite3-dev
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 WORKDIR /app
 
 COPY . .
 
+RUN apt-get update && apt-get install -y \
+    unzip curl git zip
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 RUN composer install --no-dev --optimize-autoloader
+
+RUN php artisan config:clear
+RUN php artisan cache:clear
 
 EXPOSE 10000
 

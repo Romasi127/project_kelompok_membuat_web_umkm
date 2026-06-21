@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
@@ -49,13 +50,27 @@ Route::middleware(['auth', 'user'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Orders
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
-    Route::patch('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
-    Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
-    Route::delete('/orders', [AdminOrderController::class, 'destroyAll'])->name('orders.destroyAll');
-
     // Daily Revenue Report
     Route::get('/revenue', [AdminOrderController::class, 'revenue'])->name('revenue');
-
     // Menus (CRUD)
     Route::resource('menus', AdminMenuController::class)->except(['show']);
+});
+
+// ====================================================================
+// ROUTE RAHASIA UNTUK MIGRASI DATABASE SQLITE DI RENDER (FREE TIER)
+// ====================================================================
+Route::get('/jalankan-migrasi-rahasia', function () {
+    try {
+        // Membuat file database kosong jika belum ada di folder database
+        $dbPath = database_path('database.sqlite');
+        if (!file_exists($dbPath)) {
+            touch($dbPath);
+        }
+        
+        // Menjalankan migrasi database dan mengisi data seeder otomatis
+        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+        return "Mantap wak! Database berhasil dibuat dan data menu sudah masuk.";
+    } catch (\Exception $e) {
+        return "Waduh error: " . $e->getMessage();
+    }
 });

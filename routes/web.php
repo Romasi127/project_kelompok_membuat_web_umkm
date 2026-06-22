@@ -63,10 +63,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 // ====================================================================
 Route::get('/jalankan-migrasi-rahasia', function () {
     try {
-        // Membuat file database kosong jika belum ada di folder database
-        $dbPath = database_path('database.sqlite');
-        if (!file_exists($dbPath)) {
-            touch($dbPath);
+        // Membuat file database kosong jika menggunakan SQLite dan file belum ada
+        if (config('database.default') === 'sqlite') {
+            $dbPath = database_path('database.sqlite');
+            if (!file_exists($dbPath)) {
+                touch($dbPath);
+            }
         }
         
         // Menjalankan migrasi database dan mengisi data seeder otomatis

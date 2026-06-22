@@ -14,7 +14,8 @@
 /.zed
 /auth.json
 /node_modules
-/public/build
+# /public/build (di-comment agar folder build CSS/JS ikut terunggah ke GitHub/Vercel)
+# /public/build
 /public/fonts-manifest.dev.json
 /public/hot
 /public/storage

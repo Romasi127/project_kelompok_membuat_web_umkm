@@ -33,6 +33,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::middleware('guest')->group(function () {
     Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/admin/login', [AdminAuthController::class, 'login']);
+    Route::get('/admin/register', [AdminAuthController::class, 'showRegisterForm'])->name('admin.register');
+    Route::post('/admin/register', [AdminAuthController::class, 'register']);
 });
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout')->middleware('auth');
 

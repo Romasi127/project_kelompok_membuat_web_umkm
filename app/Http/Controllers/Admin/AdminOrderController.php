@@ -110,7 +110,7 @@ class AdminOrderController extends Controller
         // Rekap bulanan (12 bulan terakhir)
         $monthlyRevenue = Order::where('status', 'selesai')
             ->where('created_at', '>=', now()->subMonths(12))
-            ->selectRaw('strftime("%Y-%m", created_at) as month, SUM(total_price) as total, COUNT(*) as order_count')
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as month, SUM(total_price) as total, COUNT(*) as order_count")
             ->groupBy('month')
             ->orderBy('month', 'desc')
             ->get();

@@ -52,6 +52,9 @@ Route::middleware(['auth', 'user'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Orders
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
+    Route::patch('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+    Route::delete('/orders', [AdminOrderController::class, 'destroyAll'])->name('orders.destroyAll');
     // Daily Revenue Report
     Route::get('/revenue', [AdminOrderController::class, 'revenue'])->name('revenue');
     // Menus (CRUD)
